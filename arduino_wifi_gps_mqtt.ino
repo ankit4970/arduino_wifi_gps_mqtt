@@ -16,8 +16,8 @@
 //IPAddress server(10, 0, 0, 22);
 const char* broker = "iot.eclipse.org";
 const char* topic = "cmpe297/sensor";
-char ssid[] = "OldMonk";                // your network SSID (name)
-char pass[] = "oldmonk260";             // your network password
+char ssid[] = "Lenovo";                // your network SSID (name)
+char pass[] = "12345678";             // your network password
 int status = WL_IDLE_STATUS;            // the Wifi radio's status
 
 // DS18B20 1 wire temperature sensor
@@ -35,18 +35,18 @@ PubSubClient client(espClient);
 SoftwareSerial soft(2,3);           // RX, TX
 char temp[50];
 
-float latitude=37.338208, longitude= -121.886329, speed_kph, heading, speed_mph, altitude,temperature=25.36;
+float latitude=37.336082, longitude= -121.882572, speed_kph, heading, speed_mph, altitude,temperature=25.36;
 /*******************************************************************************************************    
 *   readTemperature 
 *******************************************************************************************************/
 void readTemperature()
 {
-    //Serial.print(" Requesting temperatures..."); 
     sensors.requestTemperatures();                      // Send the command to get temperature readings 
     //Serial.println("DONE"); 
-    //Serial.print("Temperature is: ");
+    Serial.print("Temperature is: ");
     temperature = sensors.getTempCByIndex(0);           // 0 refers to the first IC on the wire
-    Serial.print(temperature);  
+    Serial.print(temperature);
+    Serial.println();  
     delay(100); 
 }
 
@@ -90,7 +90,7 @@ bool sendSensorData()
     // Use mqtt to send data to a subscribed topic
     String lat_str,lon_str,long_str,temp_str,datetime_str;
     lat_str = String(latitude,6);
-    lon_str = String(longitude,6);
+    lon_str = String(longitude,7);
     temp_str = String(temperature,2);
     long_str = lat_str+","+lon_str+","+temp_str;
     long_str.toCharArray(temp, long_str.length() + 1);
@@ -105,7 +105,7 @@ void setup()
 {
     // initialize serial for debugging
     Serial.begin(9600);
-#if 0
+#if 1
     // Initialize GPS Module
     fonaSerial->begin(9600);
     if (! fona.begin(*fonaSerial)) 
